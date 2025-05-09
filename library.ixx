@@ -21,49 +21,51 @@ export namespace Sexper {
     };
 
     class SexpElement {
+    public:
         SexpElementType type;
 
-    public:
         explicit SexpElement(const SexpElementType type) : type(type) {
         }
+
+        virtual ~SexpElement() = default;
     };
 
-    class SexpFloatElement : public SexpElement {
+    class SexpFloatElement final : public SexpElement {
+    public:
         double value;
 
-    public:
         explicit SexpFloatElement(const double value) : SexpElement(FLOAT), value(value) {
         }
     };
 
-    class SexpIntElement : public SexpElement {
+    class SexpIntElement final : public SexpElement {
+    public:
         int value;
 
-    public:
         explicit SexpIntElement(const int value) : SexpElement(INT), value(value) {
         }
     };
 
-    class SexpStringElement : public SexpElement {
+    class SexpStringElement final : public SexpElement {
+    public:
         std::string value;
 
-    public:
         explicit SexpStringElement(std::string value) : SexpElement(STRING), value(std::move(value)) {
         }
     };
 
-    class SexpSymbolElement : public SexpElement {
+    class SexpSymbolElement final : public SexpElement {
+    public:
         std::string symbol;
 
-    public:
         explicit SexpSymbolElement(std::string symbol) : SexpElement(SYMBOL), symbol(std::move(symbol)) {
         }
     };
 
-    class SexpListElement : public SexpElement {
+    class SexpListElement final : public SexpElement {
+    public:
         std::vector<std::unique_ptr<SexpElement> > elements;
 
-    public:
         SexpListElement *parent;
 
         explicit SexpListElement(SexpListElement *parent) : SexpElement(LIST), parent(parent) {
@@ -124,9 +126,9 @@ export namespace Sexper {
 
                     int32_t intValue;
                     if (
-                        auto [ptr, ec] =
+                        false /*auto [ptr, ec] =
                                 std::from_chars(text.data(), text.data() + text.size(), intValue);
-                        ec == std::errc() && ptr == text.data() + text.size()
+                        ec == std::errc() && ptr == text.data() + text.size()*/
                     ) {
                         *current += SexpIntElement(intValue);
                     } else {
